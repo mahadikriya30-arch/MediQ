@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediQ - Medicine Alarm</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #ff9966, #ff5e62);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 450px;
+    }
+
+    h1 {
+      color: #ff5e62;
+      margin-bottom: 20px;
+    }
+
+    .top-buttons {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .top-buttons button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .back-btn { background-color: #6c757d; }
+    .back-btn:hover { background-color: #5a6268; }
+
+    select, input[type="time"] {
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .save-btn { background-color: #007bff; }
+    .save-btn:hover { background-color: #0056b3; }
+
+    .snooze-btn { background-color: #ffc107; }
+    .snooze-btn:hover { background-color: #e0a800; }
+
+    .dismiss-btn { background-color: #dc3545; }
+    .dismiss-btn:hover { background-color: #c82333; }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e6f2ff;
+      border-radius: 5px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top-buttons">
+      <button class="back-btn" onclick="goBack()">⬅ Back</button>
+    </div>
+
+    <h1>Medicine Alarm</h1>
+
+    <label for="alarmTime">Select Alarm Time:</label><br>
+    <input type="time" id="alarmTime"><br>
+
+    <label for="ringtoneSelect">Select Ringtone:</label><br>
+    <select id="ringtoneSelect">
+      <option value="alarm1.mp3">Classic Beep</option>
+      <option value="alarm2.mp3">Soft Chime</option>
+      <option value="alarm3.mp3">Digital Tone</option>
+      <option value="alarm4.mp3">Extra Tone</option>
+    </select><br>
+
+    <button class="save-btn" onclick="setAlarm()">Save Alarm</button>
+
+    <div id="alarmControls" style="display:none;">
+      <button class="snooze-btn" onclick="snooze()">Snooze</button>
+      <button class="dismiss-btn" onclick="dismissAlarm()">Dismiss</button>
+    </div>
+
+    <div id="calendarLog" class="result-box">
+      <h3>Medicine Records</h3>
+      <!-- Records will appear here -->
+    </div>
+  </div>
+
+  <script>
+    let alarmTimeout;
+    let ringtone;
+
+    function goBack() {
+      window.history.back();
+    }
+
+    function setAlarm() {
+      const time = document.getElementById("alarmTime").value;
+      const ringtoneFile = document.getElementById("ringtoneSelect").value;
+
+      if (time) {
+        alert("Alarm set for " + time);
+        document.getElementById("alarmControls").style.display = "block";
+
+        // Load ringtone
+        ringtone = new Audio(ringtoneFile);
+
+        // Play ringtone immediately after saving
+        ringtone.play();
+
+        // Calculate delay until alarm
+        const now = new Date();
+        const alarmTime = new Date();
+        const [hours, minutes] = time.split(":");
+        alarmTime.setHours(hours, minutes, 0, 0);
+
+        let delay = alarmTime.getTime() - now.getTime();
+        if (delay < 0) delay += 24 * 60 * 60 * 1000; // next day
+
+        clearTimeout(alarmTimeout);
+        alarmTimeout = setTimeout(() => {
+          ringtone.play();
+          alert("Medicine Alarm ringing!");
+        }, delay);
+      }
+    }
+
+    function snooze() {
+      ringtone.pause();
+      const answer = confirm("Did you take your medicine?");
+      const today = new Date().toDateString();
+      const log = document.getElementById("calendarLog");
+
+      if (answer) {
+        log.innerHTML += `<p>${today}: ✅ Medicine Taken</p>`;
+      } else {
+        log.innerHTML += `<p>${today}: ❌ Medicine Not Taken</p>`;
+      }
+    }
+
+    function dismissAlarm() {
+      ringtone.pause();
+      alert("Alarm dismissed.");
+    }
+  </script>
+</body>
+</html>

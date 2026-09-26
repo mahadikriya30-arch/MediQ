@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediQ - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff); /* Attractive gradient */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 400px;
+    }
+
+    h1 {
+      color: #0072ff;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #333;
+      margin-top: 20px;
+    }
+
+    form input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    form button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Welcome to MediQ</h1>
+    <h2>About Us</h2>
+    <p>MediQ is your trusted disease information system. We provide reliable details on symptoms, precautions, and medicines, along with reminders to help you stay healthy.</p>
+
+    <h2>Login / Sign Up</h2>
+    <form id="signupForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const signupForm = document.getElementById("signupForm");
+
+      if (signupForm) {
+        signupForm.addEventListener("submit", function(e) {
+          e.preventDefault();
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          if (username && password) {
+            localStorage.setItem("loggedInUser", username);
+            alert("Sign Up successful! Welcome, " + username);
+            window.location.href = "disease.html";
+          } else {
+            alert("Please fill all fields.");
+          }
+        });
+      }
+
+      const user = localStorage.getItem("loggedInUser");
+      if (user && window.location.pathname.includes("index.html")) {
+        window.location.href = "disease.html";
+      }
+    });
+  </script>
+</body>
+</html>

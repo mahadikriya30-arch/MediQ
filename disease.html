@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediQ - Symptom Checker</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #43cea2, #185a9d);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 450px;
+    }
+
+    h1 {
+      color: #185a9d;
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .search-box input {
+      padding: 10px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .search-box button {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .search-box button:hover {
+      background-color: #218838;
+    }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e6f2ff;
+      border-radius: 5px;
+      text-align: left;
+    }
+
+    .top-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .top-buttons button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .back-btn { background-color: #6c757d; }
+    .back-btn:hover { background-color: #5a6268; }
+
+    .logout-btn { background-color: #dc3545; }
+    .logout-btn:hover { background-color: #c82333; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top-buttons">
+      <button class="back-btn" onclick="goBack()">⬅ Back</button>
+      <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </div>
+
+    <h1>Symptom Checker</h1>
+    <div class="search-box">
+      <input type="text" id="symptoms" placeholder="Enter your symptoms...">
+      <button onclick="checkDisease()">Search</button>
+    </div>
+    <div id="results" class="result-box">
+      <!-- Results will appear here -->
+    </div>
+
+    <!-- Link to Alarm Page -->
+    <div style="margin-top:20px;">
+      <a href="alarm.html" 
+         style="display:inline-block; padding:10px 20px; background-color:#ff5e62; color:white; text-decoration:none; border-radius:5px;">
+         Go to Medicine Alarm
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      alert("You have been logged out.");
+      window.location.href = "index.html";
+    }
+
+    function checkDisease() {
+      const symptoms = document.getElementById("symptoms").value.toLowerCase();
+      let result = "";
+
+      if (symptoms.includes("fever")) {
+        result = `
+          <h3>Disease: Fever</h3>
+          <p><strong>Symptoms:</strong> High temperature, chills, weakness.</p>
+          <p><strong>Precautions:</strong> Rest, stay hydrated.</p>
+          <p><strong>Medicines:</strong> Paracetamol (low severity).</p>
+          <p><strong>Severity:</strong> If persistent/high → Consult a doctor.</p>
+        `;
+      } else if (symptoms.includes("cold")) {
+        result = `
+          <h3>Disease: Common Cold</h3>
+          <p><strong>Symptoms:</strong> Sneezing, runny nose, cough.</p>
+          <p><strong>Precautions:</strong> Warm fluids, rest.</p>
+          <p><strong>Medicines:</strong> Cough syrup, antihistamines.</p>
+          <p><strong>Severity:</strong> Low.</p>
+        `;
+      } else if (symptoms.includes("epilepsy")) {
+        result = `
+          <h3>Disease: Epilepsy</h3>
+          <p><strong>Symptoms:</strong> Seizures, confusion, loss of awareness.</p>
+          <p><strong>Precautions:</strong> Avoid triggers, regular medication.</p>
+          <p><strong>Medicines:</strong> Not suggested here.</p>
+          <p><strong>Severity:</strong> High — Consult a doctor immediately.</p>
+        `;
+      } else if (symptoms.includes("piles")) {
+        result = `
+          <h3>Disease: Piles (Hemorrhoids)</h3>
+          <p><strong>Symptoms:</strong> Painful swelling near anus, bleeding.</p>
+          <p><strong>Precautions:</strong> High-fiber diet, avoid straining.</p>
+          <p><strong>Medicines:</strong> Ointments, stool softeners (low severity).</p>
+          <p><strong>Severity:</strong> Severe bleeding → Consult a doctor.</p>
+        `;
+      } else if (symptoms.includes("migraine")) {
+        result = `
+          <h3>Disease: Migraine</h3>
+          <p><strong>Symptoms:</strong> Severe headache, nausea, sensitivity to light.</p>
+          <p><strong>Precautions:</strong> Rest in dark room, avoid triggers.</p>
+          <p><strong>Medicines:</strong> Pain relievers (low severity).</p>
+          <p><strong>Severity:</strong> Frequent/severe → Consult a doctor.</p>
+        `;
+      } else if (symptoms.includes("pcod") || symptoms.includes("pcos") || symptoms.includes("menstrual")) {
+        result = `
+          <h3>Condition: PCOD/PCOS / Menstrual Health</h3>
+          <p><strong>Symptoms:</strong> Irregular periods, weight gain, acne.</p>
+          <p><strong>Precautions:</strong> Healthy diet, exercise, stress management.</p>
+          <p><strong>Medicines:</strong> Not suggested here.</p>
+          <p><strong>Severity:</strong> Severe pain/irregular cycles → Consult a gynecologist.</p>
+        `;
+      } else {
+        result = `<p>No matching disease found. Please consult a doctor.</p>`;
+      }
+
+      document.getElementById("results").innerHTML = result;
+    }
+  </script>
+</body>
+</html>
